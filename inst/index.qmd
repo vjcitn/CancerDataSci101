@@ -25,9 +25,12 @@ intro <- tryCatch(
 
 # Welcome {-}
 
-This is the landing page of the `BiocBook` entitled *...*.  
+This is the landing page of the `BiocBook` for the Dana-Farber YES for CURE
+Cancer Data Science summer curriculum.
 
-This book introduces the reader to *...*.  
+A concept map of the contents as of September 2023 is:
+
+<img src="YESCDS_map.png" height="350px"/>
 
 # Docker image {-}
 

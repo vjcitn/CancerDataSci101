@@ -1,0 +1,413 @@
+# Counting cancers
+
+```{r setup,echo=FALSE,results="hide"}
+suppressMessages({
+ suppressPackageStartupMessages({
+  library(YESCDS)
+library(tibble)
+library(dplyr)
+library(plotly)
+library(ggplot2)
+library(ggbeeswarm)
+library(DT)
+data(woncan_meta)
+data(canada_crude)
+data(woncan)
+data(vjc_cancer_net)
+littab = woncan |> select(MSA, `Cancer Sites`, Age.Adjusted.Rate) |> as.data.frame()
+  })
+ })
+```
+
+
+## Cancer experiences: a personal view
+
+In 60 years of life I have been cancer-free, but many
+family members and friends have had to address
+the disease.
+
+I prepared a table with some information on contacts
+whose cancer experiences I know of:
+
+```{r lktab}
+datatable(vjc_cancer_net)
+```
+
+Note that the table can be sorted and searched.  You can also
+alter the number of records presented.
+
+## Questions
+
+A.1.1. Why would a person make a table like this?
+
+A.1.2. How could this table be made more informative?
+
+## Answers
+
+```
+A.1.1.
+
+A.1.2.
+```
+
+## Cancer rates for public health assessment
+
+Motivations for studying cancer at the *population level* are detailed
+on a [National Cancer Institute web page.](https://www.cancer.gov/research/areas/public-health)
+
+Briefly, cancers contribute to
+
+- years of life lost
+- loss of quality of life for patients and families
+- lost productivity
+
+Furthermore, as the population ages, the effects of cancer will be more pronounced as time goes on.
+
+
+*Although cancer affects individual patients and their families in different ways, studying 
+its impact on large populations can provide important information that influences 
+practices, policies, and programs that directly affect the health of millions of people in 
+the United States each year.* -- from the NCI web page
+
+This idea of "studying [cancer's] impact on large populations" brings us immediately to data
+science and statistics.
+
+Two terms of epidemiology will be of use to us
+
+- *prevalence*: the proportion of the population currently affected by a disease
+- *incidence*: the proportion of the population, in a given time interval, that
+was disease-free prior to the interval but developed the disease within the interval
+
+Prevalence expresses the current burden of disease within a population.
+
+Incidence expresses the rapidity with which a disease grows in a population.
+
+For a more detailed discussion of these terms, check [this CDC site](https://www.cdc.gov/csels/dsepd/ss1978/lesson3/section2.html#:~:text=Incidence%20refers%20to%20the%20occurrence,cases%20per%20unit%20of%20population.).
+
+An excellent resource on rate estimation and interpretation is the [online book on
+cancer screening](https://www.ncbi.nlm.nih.gov/books/NBK550212/pdf/Bookshelf_NBK550212.pdf) by Pamela Marcus, hosted at NCI.
+
+
+### Collecting cancer data
+
+The role of statistics in our lives has
+intensified with the COVID-19 pandemic.
+
+Policymakers have proposed that personal protective
+behaviors and legal obligations to mask
+or avoid traveling can change depending on the
+"infection rates" in localities.
+
+Cancer Registries are systems managed at the
+state level that collect information on cancers
+as they are identified by health care providers.
+
+"SEER" stands for Surveillance, Epidemiology and End Results.
+It is a program developed at the National Institutes of Health (NIH)
+National Cancer Institute (NCI).  Data are collected at 17 regional centers.
+
+The SEER web site, offers various facets of cancer data to investigate.
+
+
+![SEERlist](images/SEERlist.jpg)
+
+### Body sites with relatively high cancer incidence
+
+![SEER 2021 pie charts](images/piecharts.jpg)
+
+### New diagnoses, and deaths, over time
+
+A very broad overview of cancer's impact on Americans over the past 20 years:
+
+![SEER overview, 2021](images/rateOverview.jpg)
+
+### Exercises
+
+A.2.1 The display just above asserts that over 1.8 million Americans will
+present with a new cancer diagnosis in 2021.  Re-express this prediction as
+a "rate per 100,000 persons".
+
+A.2.2 True or False: Of cancers newly identified in US citizens in 2021, more than 8\%
+arise in the pancreas.
+
+### Answers
+
+```
+A.2.1
+
+A.2.2
+```
+
+## A view of pancreatic cancer incidence
+
+We can "drill down" on specific cancer types using the drop-down menu
+at seer.cancer.gov.  For cancer of the pancreas we have:
+
+![SEER pancreas, 2021](images/pancreas.jpg)
+
+## A view of colorectal cancer incidence
+
+For cancer of the colon or rectum we have:
+
+![SEER colon and rectum, 2021](images/colon.jpg)
+
+### Exercises
+
+A.2.3 Which of the following describes observations on pancreatic cancer between
+1992 and 2019?  
+
+-  the death rate per 100000 population increased by two,
+-  the rate of new pancreatic cancers per 100000 population increased by two,
+-  the rate of new pancreatic cancers per 100000 population remained stable.
+
+A.2.4 True or false: The death rate, and the incidence rate, for cancers of colon
+and rectum were approximately halved in the interval between 1992 and 2019.
+
+### Answers
+
+```
+A.2.3
+
+A.2.4
+```
+
+## County-level variation in cancer rates
+
+We focus on colorectal cancer:
+
+![NIH/CDC State Cancer Profiles](images/colon8GroupIncidence.jpg)
+
+## Exercises
+
+A.3.1  Use [State Cancer Profiles](https://statecancerprofiles.cancer.gov/map/map.noimage.php) to produce
+a map of colorectal cancer incidence for Massachusetts.  You will have to
+make selections in the web interface.  Choose the Quantiles interval type with 8 intervals.
+Obtain the map for both sexes, all ages.  What is the county with lowest incidence of colorectal cancer?
+
+A.3.2 True or false: In Massachusetts, the age-adjusted incidence of colorectal cancer for individuals
+greater than 65 years of age is approximately ten times that of individuals less than 50 years of age.
+
+A.3.3 Return to cancers of colon and rectum.  Form a map for Area "United States", Area Type "By State".
+Limit to age less than 50.  Which state has the highest incidence of colorectal cancer in this age group?
+
+A.3.4 Data presented by the Environmental Protection Agency can be seen
+at [Exhibit 5 of the current Report on the Environment](https://cfpub.epa.gov/roe/indicator.cfm?i=73#5).
+What is the estimated incidence rate for colorectal cancer for females in 2017 (end of the
+curve)?  How does this compare to the "State Cancer Profile" statistic for females of all ages?
+
+A.3.5 Using the EPA chart in Exhibit 5, which type of cancer in females shows a steady decrease
+in incidence from 2000 to 2017?
+
+## Answers
+
+```
+A.3.1
+
+A.3.2 
+
+A.3.3
+
+A.3.4
+
+A.3.5
+```
+
+
+## Visualizing variability
+
+We have been looking at cancer incidence data in the form of tables of numbers.
+We can sort, search, filter these tables fairly easily.  "Data graphics", also
+known as "statistical visualization", have been devised to help us get
+insights that have a different character.  One objective is to develop a
+sense of variation in a quantity of interest, by aggregating data values in
+various ways and presenting these aggregates in graphical form.
+
+
+
+### Histograms
+ 
+Histograms help visualize variability in a quantity of interest.  The range of the quantity
+of interest is "binned" -- chopped up into intervals of equal width.  Midpoints of
+bins are plotted on the x axis, and counts of values in bins are plotted on the y axis.
+
+We illustrate with the CDC WONDER data on Prostate cancer incidence.
+
+```{r lkhist, echo=TRUE}
+make_hist(site="Prostate", binwidth=5, rate_table=littab)
+```
+
+We can change the visual character of the histogram display by reducing the bin width.
+
+
+```{r lkhist2, echo=TRUE}
+make_hist(site="Prostate", binwidth=2, rate_table=littab)
+```
+
+#### Exercises
+
+A.5.1 Based on the first histogram shown above, what is the most commonly
+observed value for prostate cancer incidence (per 100,000 men) in metropolitan
+statistical areas (MSAs) of the United States?  You can scroll over the display
+to find values for particular MSAs.  Your answer can be a range of numbers.
+
+A.5.2 Use the first histogram to report on the number of MSAs that report
+prostate cancer incidence between 142 and 147 per 100,000 men.
+
+A.5.3 The second histogram is produced from the same set of statistics as the
+first, but uses a smaller "binwidth".  Comment on some differences between
+the two displays.
+
+A.5.4 Add a cell to your notebook using the "+" button, enter the command
+`make_hist(site="Female Breast")` and press the "play" button.  What
+is the most commonly reported rate of female breast cancer incidence in
+MSAs in the US?
+
+A.5.5 Hover over the leftmost block in the display.  What is the MSA with
+lowest value of Female Breast cancer incidence, and what is the reported rate?
+
+#### Answers
+
+```
+A.5.1
+
+A.5.2
+
+A.5.3
+
+A.5.4
+
+A.5.5
+```
+
+### Using a histogram to compare cancer incidence rates in two areas
+
+By computing differences or ratios and forming the histogram, we
+can assess whether there is a tendency to higher values in
+one of the areas of interest.
+
+```{r lk2, echo=TRUE}
+ggplotly(make_comparison(rate_table=littab, type="ratios"))
+```
+
+More detail about individual
+values can be obtained with an approach called "beeswarm" plotting.
+
+```{r lk3, echo=TRUE}
+ggplotly(make_pair(type="beeswarm", rate_table=littab ))
+```
+
+#### Exercises
+
+A.5.6 The use of ratios in the `make_comparison` display above eliminates
+information about the absolute incidence rates.  Open a notebook cell and
+use the commands
+```
+library(YESCDS)
+library(plotly)
+data(woncan)
+ggplotly(make_comparison(rate_table=woncan, type="scatter"))
+```
+When you hover the mouse over points on the display, the
+individual rates are presented.
+
+True or False: the presence of a majority of points below and to the right of the
+straight line implies that the incidence rates for a variety of
+cancer types in Baton Rouge, LA are
+more frequently higher than those in Tucson, AZ.
+
+A.5.7 Using the values presented in the
+interactive scatterplot, compute the ratio of 
+incidence rates for prostate cancer in Baton Rouge
+compared to those in Tucson.  Compare to the result
+provided in the `make_comparison` histogram above.
+
+#### Answers
+
+```
+A.5.6
+
+A.5.7
+```
+
+## Age adjustment for fair comparisons
+
+Two basic types of comparison are of interest in cancer epidemiology:
+
+- Do cancer rates differ between geographic regions (counties, states, countries, ...)?
+- Do cancer rates change over time?
+
+Because cancer risks increaase generally as people age, comparisons
+of cancer risk should account for the "age structure" in the
+regions or time periods being compared.
+
+## Crude rate examples
+
+Crude rates ignore age structure.  Here are some examples of mortality rates taken (with rounding)
+from a Statistics Canada web site.
+
+```{r examine}
+canada_crude[6,4] = NA
+canada_crude
+```
+
+Question: What is the (rounded) crude mortality rate for the older age group in 2011?
+
+## Age structure
+
+The "age structure" of a population is the percentage of population
+reporting ages in different groups.  Usually the grouping is
+finer than what we are using in this example; more realistic
+illustrations are given below.
+
+Statistics Canada proposed using the age structure of Canada in 1991
+as a reference for standardization.  In 1991, 62% of Canadians
+were age 0 to 39y, and 38% were 40y and older.
+
+We use these percentages to adjust the crude rates.
+
+## Adjusted rate computation
+
+For the year 2000, we take the crude rates of 7 and 450 (per 100000
+population) and reweight and sum:
+```
+7 * .62 + 450 * .38
+```
+yielding 175.3 per 100000 "standard population".  This is the
+age standardized mortality rate in the year 2000.
+
+### Questions
+
+A.6.1 What is the age standardized mortality rate for 2011?
+
+A.6.2 What can you say about the cancer mortality trend in Canada between 2000 and 2011?
+
+### Answers
+
+```
+A.6.1
+
+A.6.2
+```
+
+## Some examples of age structure models
+
+A [methods paper](https://wonder.cdc.gov/wonder/help/cancer/fayfeuerconfidenceintervals.pdf) on
+confidence intervals for standardized rates includes the following display:
+
+![Age structure](images/standardPopGraphs.jpg)
+
+We read this as showing that in the US in 1970, about 18% of the population
+was under 10 years of age, while in the world overall, about 22% of the
+population was under 10 years of age.
+
+### Question
+
+A.6.3 What features of the bottom two displays above suggest that
+it will be important to differentiate age distributions for men and
+women in forming standardized rates?
+
+### Answer
+
+```
+A.6.3
+```

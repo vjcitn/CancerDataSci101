@@ -2,6 +2,8 @@ book:
   title: "CancerDataSci101"
   chapters:
     - index.qmd
+    - pages/ch1.qmd
+    - pages/ch2.qmd
   cover-image: assets/cover.png
   favicon: assets/favicon.png
   sidebar: 
