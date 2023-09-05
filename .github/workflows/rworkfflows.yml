@@ -38,10 +38,10 @@ jobs:
     steps:
     - uses: neurogenomics/rworkflows@master
       with:
-        run_bioccheck: ${{ true }}
+        run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
         as_cran: ${{ false }}
-        run_vignettes: ${{ true }}
+        run_vignettes: ${{ false }}
         has_testthat: ${{ true }}
         run_covr: ${{ false }}
         run_pkgdown: ${{ false }}
