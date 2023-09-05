@@ -30,7 +30,7 @@ I prepared a table with some information on contacts
 whose cancer experiences I know of:
 
 ```{r lktab}
-vjc_cancer_net
+datatable(vjc_cancer_net)
 ```
 
 Note that the table can be sorted and searched.  You can also
