@@ -18,6 +18,13 @@ Depends:
     R (>= 4.3), 
     BiocBook
 Imports:
+    YESCDS, 
+    tibble, 
+    dplyr, 
+    plotly, 
+    ggplot2, 
+    DT, 
+    ggbeeswarm  
 Suggests:
     BiocManager, 
     BiocVersion, 
@@ -29,7 +36,8 @@ Suggests:
     knitr, 
     quarto
 Remotes:
-    github::js2264/BiocBook
+    github::js2264/BiocBook,
+    github::vjcitn/YESCDS
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
