@@ -151,7 +151,7 @@ B.2.5
 
 
 ```{r lkd3b}
-datatable(MA_cancer_rate_table())
+MA_cancer_rate_table()
 ```
 
 ## Mapping the rates
